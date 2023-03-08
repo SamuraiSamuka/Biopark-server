@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://admin:admin@localhost:5432"
+}
+
+model Condominio {
+  id Int @id @default(autoincrement())
+  nome String
+  uf String
+  cidade String
+  bairro String
+  logradouro String
+  numero String
+}
+
+model Predios {
+  id Int @id @default(autoincrement())
+  condominioid Int
+  nome String
+  pisos String
+}
+
+model Apartamentos {
+  id Int @id @default(autoincrement())
+  condominioid Int
+  predioid Int
+  loocatarioid Int @default(0)
+  andar String
+  numero String
+  vago Boolean @default(true)
+  aluguel_valor Float
+}
