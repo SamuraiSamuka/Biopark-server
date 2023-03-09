@@ -24,16 +24,28 @@ model Predios {
   id Int @id @default(autoincrement())
   condominioid Int
   nome String
-  pisos String
+  pisos String?
 }
 
 model Apartamentos {
   id Int @id @default(autoincrement())
   condominioid Int
   predioid Int
-  loocatarioid Int @default(0)
-  andar String
+  locatarioid Int? @unique
+  andar Int
   numero String
   vago Boolean @default(true)
-  aluguel_valor Float
+  aluguel_valor Float?
+}
+
+model Locatarios {
+  id Int @id @default(autoincrement())
+  nome String
+  cpf String
+  data_nascimento DateTime
+  condominioid Int?
+  predioid Int?
+  apartamentoid Int? @unique
+  telefone String
+  status Int @default(1)
 }

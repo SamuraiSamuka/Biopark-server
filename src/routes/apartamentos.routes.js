@@ -9,7 +9,7 @@ apartamentosRoutes.post("/apartamentos", async (req, res) => {
     const { condominioid, predioid, andar, numero, aluguel_valor } = req.body;
     const apartamento = await prisma.apartamentos.create({data:{condominioid, predioid, andar, numero, aluguel_valor}})
     return res.status(201).json(apartamento)
-})
+}) 
 
 // R
 apartamentosRoutes.get("/apartamentos", async (req, res) => {
@@ -41,11 +41,14 @@ apartamentosRoutes.get("/apartamentos/:id", async (req, res) => {
 
 // U
 apartamentosRoutes.put("/apartamentos/:id", async (req, res) => {
-    const { condominioid, predioid, andar, numero, aluguel_valor } = req.body;
+    const { condominioid, predioid, andar, numero, aluguel_valor, locatarioid, vago } = req.body;
     const { id } = req.params;
     let IntId = parseInt(id);
     let condominioidInt = parseInt(condominioid);
     let predioidInt = parseInt(predioid);
+    let locatarioidInt = parseInt(locatarioid);
+    const andarInt = parseInt(andar)
+    const aluguel_valorFloat = parseFloat(aluguel_valor)
 
     if(!IntId){
         return res.status(400).json("Id é obrigatorio")
@@ -57,8 +60,14 @@ apartamentosRoutes.put("/apartamentos/:id", async (req, res) => {
         }
     })
 
+    const locatarioOcupado = await prisma.apartamentos.findUnique({ where: { locatarioid: locatarioidInt } })
+
     if(!apartamentoExistente){
         return res.status(404).json("Esse apartamento não existe")
+    }
+
+    if(!!locatarioOcupado && !(locatarioOcupado.id === IntId)) {
+        return res.status(403).sendStatus(403)
     }
 
     const apartamento = await prisma.apartamentos.update({
@@ -68,11 +77,13 @@ apartamentosRoutes.put("/apartamentos/:id", async (req, res) => {
         data: {
             condominioid: condominioidInt,
             predioid: predioidInt, 
-            andar,
+            andar: andarInt,
             numero, 
-            aluguel_valor
+            aluguel_valor: aluguel_valorFloat,
+            locatarioid: locatarioidInt,
+            vago
         }
-    })
+    }) 
     return res.status(200).json(apartamento)
 })
 
