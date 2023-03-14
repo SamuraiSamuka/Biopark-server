@@ -1,7 +1,7 @@
 # BioPark - server
 
 Este é o server do aplicativo gerenciador de apartamentos.
-[github do cliente ](https://github.com/SamuraiSamuka/Apartamentos)
+[repositório do client](https://github.com/SamuraiSamuka/Biopark-client)
 
 ## Requisitos para rodar o sistema
 
